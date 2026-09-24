@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AeroType 💨⚡ - AI Voice Cloning, Speech Transformer, Transcriber &amp; Accessibility Suite (Danau Toba Edition)</title>
+  <meta name="description" content="AeroType adalah suite aksesibilitas dan kecerdasan buatan vokal komprehensif: AI Voice Cloning, Real-time Voice Transformer DSP, Meeting Transcriber, Vocal Health Monitor &amp; Breath DSP." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            toba: {
+              water: '#0ea5e9',
+              deep: '#0369a1',
+              forest: '#059669',
+              mist: '#cbd5e1'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    code, pre, .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(6, 182, 212, 0.8); }
+    }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden">
+
+  <!-- ==================== BACKGROUND DANAU TOBA LAYER ==================== -->
+  <div
+    id="toba-bg-layer"
+    class="fixed inset-0 bg-cover bg-center bg-fixed transition-all duration-300 pointer-events-none z-0 opacity-45"
+    style="background-image: url('danau_toba_bg.jpg'); filter: blur(2px);"
+  ></div>
+  <div class="fixed inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/70 to-slate-950/95 pointer-events-none z-0"></div>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="relative z-40 w-full bg-slate-900/85 backdrop-blur-xl border-b border-slate-800 sticky top-0 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      
+      <!-- Brand Logo & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-cyan-500/20">
+          <i data-lucide="wind" class="w-6 h-6 text-slate-950"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-black tracking-tight bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
+              AeroType
+            </h1>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950">
+              🌄 AI Voice &amp; Speech Suite
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-medium">
+            AI Voice Typing, Voice Cloning Studio, Transformer DSP, Transcriber &amp; Speech Health
+          </p>
+        </div>
+      </div>
+
+      <!-- 7 Productive Mode Tabs Switcher -->
+      <div class="flex flex-wrap items-center gap-1 bg-slate-950/90 p-1.5 rounded-2xl border border-slate-800 text-xs font-bold">
+        <button
+          id="tab-editor"
+          onclick="switchMode('editor')"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25 transition-all"
+        >
+          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+          <span>1. Voice Editor</span>
+        </button>
+
+        <button
+          id="tab-voice-clone"
+          onclick="switchMode('voice-clone')"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all"
+        >
+          <i data-lucide="dna" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span>2. Voice Cloning 🧬</span>
+        </button>
+
+        <button
+          id="tab-transformer"
+          onclick="switchMode('transformer')"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all"
+        >
+          <i data-lucide="sliders" class="w-3.5 h-3.5 text-purple-400"></i>
+          <span>3. Transformer 🎙️</span>
+        </button>
+
+        <button
+          id="tab-soundboard"
+          onclick="switchMode('soundboard')"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all"
+        >
+          <i data-lucide="headphones" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>4. Suara Alam 🍃</span>
+        </button>
+
+        <button
+          id="tab-flute"
+          onclick="switchMode('flute')"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all"
+        >
+          <i data-lucide="music" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span>5. Seruling Toba 🎵</span>
+        </button>
+
+        <button
+          id="tab-transcriber"
+          onclick="switchMode('transcriber')"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all"
+        >
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>6. Transkrip &amp; AI 📄</span>
+        </button>
+
+        <button
+          id="tab-vocal-health"
+          onclick="switchMode('vocal-health')"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all"
+        >
+          <i data-lucide="heart-pulse" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>7. Kesehatan Vokal 📊</span>
+        </button>
+      </div>
+
+      <!-- Wallpaper Controls -->
+      <div class="flex items-center gap-2 self-end lg:self-auto text-xs text-slate-400">
+        <span class="text-[11px] font-semibold">Danau Toba:</span>
+        <input
+          type="range"
+          min="10"
+          max="85"
+          value="45"
+          id="bg-opacity-slider"
+          oninput="updateBgOpacity(this.value)"
+          class="w-16 accent-cyan-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
+          title="Atur transparansi latar belakang Danau Toba"
+        />
+        <button
+          onclick="toggleBgBlur()"
+          class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold border border-slate-700"
+          title="Toggle Blur Foto"
+        >
+          Blur
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== MAIN DASHBOARD CONTAINER ==================== -->
+  <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    
+    <!-- Microphone Activation Banner -->
+    <div id="mic-activation-banner" class="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-cyan-950/90 via-slate-900 to-slate-900 border-2 border-cyan-500/40 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="p-3 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 shrink-0">
+          <i data-lucide="mic" class="w-6 h-6 animate-pulse"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-extrabold text-white">
+            Aktifkan Sensor Suara &amp; Tiupan Mikrofon Laptop
+          </h3>
+          <p class="text-xs text-slate-300 mt-0.5">
+            Bicara untuk mengetik otomatis • Kloning profil suara • Modulasi DSP • Transkripsi rapat otomatis!
+          </p>
+        </div>
+      </div>
+
+      <button
+        onclick="initMicrophoneStream()"
+        class="px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-lg shadow-cyan-500/30 transition-all active:scale-95 shrink-0 flex items-center justify-center gap-2"
+      >
+        <i data-lucide="mic" class="w-4 h-4"></i>
+        <span>Izinkan Mikrofon Sekarang</span>
+      </button>
+    </div>
+
+    <!-- Error Notice Banner -->
+    <div id="mic-error-banner" class="hidden p-4 rounded-2xl bg-rose-950/80 border border-rose-800 text-rose-200 text-xs flex items-center gap-3">
+      <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-400 shrink-0"></i>
+      <span>Akses mikrofon tidak diizinkan. Gunakan tombol [Spasi] untuk menguji tiupan.</span>
+    </div>
+
+    <!-- ==================== TOP SENSOR & VISUALIZER GRID ==================== -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      
+      <!-- Sensitivity & DSP Status -->
+      <div class="lg:col-span-7 p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4 backdrop-blur-md">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+              <i data-lucide="sliders" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-extrabold text-white">Sensitivitas Tiupan &amp; Suara</h3>
+              <p class="text-[11px] text-slate-400">
+                Membedakan suara bicara biasa dengan tiupan angin fisik ("Fuuuh")
+              </p>
+            </div>
+          </div>
+          <span id="sensitivity-badge" class="font-mono font-bold text-sm text-cyan-400 px-3 py-1 rounded-xl bg-slate-950 border border-slate-800">
+            65%
+          </span>
+        </div>
+
+        <div class="space-y-1.5">
+          <input
+            type="range"
+            min="10"
+            max="95"
+            value="65"
+            id="sensitivity-slider"
+            oninput="handleSensitivityChange(this.value)"
+            class="w-full accent-cyan-400 cursor-pointer h-2 bg-slate-800 rounded-lg"
+          />
+          <div class="flex justify-between text-[10px] text-slate-500 font-medium">
+            <span>Ruangan Ramai (Rendah)</span>
+            <span>Optimal (65%)</span>
+            <span>Tiupan Lembut (Tinggi)</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2.5 pt-2 border-t border-slate-800 text-xs font-mono">
+          <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 block">LOW RUMBLE</span>
+            <strong id="dsp-rumble" class="text-cyan-400">0</strong>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 block">SPEECH BAND</span>
+            <strong id="dsp-speech" class="text-slate-300">0</strong>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 block">STATUS SENSOR</span>
+            <strong id="dsp-status" class="text-slate-500">IDLE</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Audio Spectrum Visualizer -->
+      <div class="lg:col-span-5">
+        <div id="visualizer-card" class="p-4 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-3 backdrop-blur-md transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div id="visualizer-icon-box" class="p-1.5 rounded-xl border bg-slate-800 text-slate-400 border-slate-700 transition-all">
+                <i data-lucide="activity" class="w-4 h-4"></i>
+              </div>
+              <span class="text-xs font-bold text-slate-200">Live Audio Visualizer</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <span id="visualizer-voice-badge" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 animate-pulse">
+                SPEECH
+              </span>
+              <span id="visualizer-blow-badge" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-bounce">
+                BLOWING 💨
+              </span>
+              <button
+                onclick="simulateBlowTrigger()"
+                class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition-colors"
+              >
+                Uji [Spasi]
+              </button>
+            </div>
+          </div>
+
+          <div class="relative h-14 bg-slate-950 rounded-2xl overflow-hidden border border-slate-800/80 p-1 flex items-center justify-center">
+            <canvas id="spectrum-canvas" width="360" height="56" class="w-full h-full block"></canvas>
+          </div>
+
+          <div class="flex items-center justify-between text-xs font-mono">
+            <div class="flex items-center gap-2">
+              <div id="visualizer-circle" class="w-7 h-7 rounded-full flex items-center justify-center border bg-slate-800 border-slate-700 text-slate-400 transition-all">
+                <i data-lucide="wind" class="w-3.5 h-3.5"></i>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block">INTENSITAS TIUPAN</span>
+                <strong id="visualizer-pct" class="text-xs text-white">0%</strong>
+              </div>
+            </div>
+            
+            <div class="text-right">
+              <span class="text-[10px] text-slate-500 block">INPUT DESIBEL</span>
+              <span class="text-xs font-bold text-slate-300"><span id="visualizer-db">-100</span> dB</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== MODE 1: VOICE DICTATION & EDITOR 📝 ==================== -->
+    <section id="section-editor" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur-md">
+        <div class="flex items-center gap-3">
+          <div class="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-white">Voice-to-Text &amp; Hands-Free Editor</h2>
+            <p class="text-xs text-slate-400">
+              Bicara langsung ke mikrofon untuk mengetik • Tiup mikrofon untuk mengedit teks bebas tangan
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            id="btn-toggle-dictation"
+            onclick="toggleSpeechRecognition()"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/30 active:scale-95 transition-all ring-2 ring-emerald-400/80 pulse-glow"
+          >
+            <i id="dictation-icon" data-lucide="mic" class="w-4 h-4 animate-bounce"></i>
+            <span id="dictation-btn-text">DIKTE SUARA AKTIF (BICARA SEKARANG)</span>
+          </button>
+
+          <div class="flex items-center gap-1 bg-slate-950 px-2.5 py-1.5 rounded-xl border border-slate-800 text-xs text-slate-400 font-bold">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <select
+              id="speech-lang-select"
+              onchange="changeSpeechLanguage(this.value)"
+              class="bg-transparent text-slate-200 text-xs font-bold focus:outline-none cursor-pointer"
+            >
+              <option value="id-ID" class="bg-slate-900 text-white" selected>🇮🇩 Bahasa Indonesia</option>
+              <option value="en-US" class="bg-slate-900 text-white">🇺🇸 English</option>
+            </select>
+          </div>
+
+          <button
+            onclick="downloadTextFile()"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-cyan-300 border border-slate-700 transition-colors"
+          >
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Export .TXT</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Large Textarea -->
+      <div class="relative rounded-3xl bg-slate-900/90 border-2 border-slate-800 shadow-2xl overflow-hidden backdrop-blur-md">
+        <div class="flex items-center justify-between px-5 py-3 border-b border-slate-800 bg-slate-950/80 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+            <span class="ml-2 font-mono text-slate-400">AeroType_Document.txt</span>
+          </div>
+          
+          <div class="flex items-center gap-4 font-mono text-slate-400 text-[11px]">
+            <span>KARAKTER: <strong id="editor-char-count" class="text-white">0</strong></span>
+            <span>KATA: <strong id="editor-word-count" class="text-cyan-400">0</strong></span>
+          </div>
+        </div>
+
+        <div class="p-5 relative">
+          <textarea
+            id="editor-textarea"
+            rows="10"
+            oninput="updateTextCounts()"
+            placeholder="Mulai berbicara ke mikrofon laptop atau ketik naskah di sini..."
+            class="w-full bg-transparent text-slate-100 placeholder-slate-500 focus:outline-none resize-none leading-relaxed text-lg"
+          ></textarea>
+
+          <div id="blow-feedback-toast" class="hidden absolute bottom-5 left-5 right-5 p-3 rounded-xl bg-gradient-to-r from-cyan-950 to-slate-900 border border-cyan-500/80 text-cyan-300 text-xs font-bold items-center gap-2 shadow-2xl animate-in fade-in">
+            <i data-lucide="wind" class="w-4 h-4 text-cyan-400 animate-bounce"></i>
+            <span id="blow-feedback-text">Aksi Tiupan Terdeteksi</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 2: AI VOICE CLONING STUDIO 🧬 ==================== -->
+    <section id="section-voice-clone" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur-md">
+        <div class="flex items-center gap-3.5">
+          <div class="p-3 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 font-black shadow-lg shadow-cyan-500/25">
+            <i data-lucide="dna" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 class="text-base font-black text-white">AI Voice Cloning &amp; Timbre Profile Studio 🧬</h2>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                Neural Formant Synthesis
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Ekstraksi frekuensi dasar (F0) &amp; formant untuk membuat kloning Text-to-Speech kustom dengan karakter suara Anda.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onclick="toggleCalibrationWizard()"
+          id="btn-toggle-wizard"
+          class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-cyan-400 text-slate-950 font-black text-xs shadow-lg shadow-cyan-500/25 transition-all active:scale-95 flex items-center gap-2"
+        >
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Kloning Suara Baru</span>
+        </button>
+      </div>
+
+      <!-- Calibration Wizard Box -->
+      <div id="clone-wizard-box" class="hidden p-6 rounded-3xl bg-slate-900/95 border-2 border-cyan-500/40 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <span class="text-xs font-black text-white flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i>
+            Kalibrasi Sampel Vokal Anda
+          </span>
+          <span id="clone-step-indicator" class="text-xs font-mono text-cyan-400 font-bold">Langkah 1/3</span>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Baca Kalimat Uji Berikut:</span>
+          <p id="clone-prompt-text" class="text-sm font-semibold text-cyan-200 italic">
+            "Danau Toba adalah danau vulkanik terindah dan terbesar di Indonesia."
+          </p>
+        </div>
+
+        <div class="flex items-center justify-between gap-3">
+          <button
+            id="btn-record-sample"
+            onclick="toggleSampleRecording()"
+            class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-black text-xs shadow-lg flex items-center gap-2"
+          >
+            <i data-lucide="mic" class="w-4 h-4"></i>
+            <span id="btn-record-sample-text">Rekam Sampel Vokal</span>
+          </button>
+
+          <button
+            id="btn-next-sample"
+            onclick="nextCalibrationStep()"
+            class="hidden px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg flex items-center gap-2"
+          >
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Simpan Sampel &amp; Lanjut</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Voice Cloning Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Profiles List -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-3">
+            <span class="text-xs font-black text-white flex items-center gap-2 border-b border-slate-800 pb-2.5">
+              <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
+              Profil Suara Kloning Tersedia
+            </span>
+            <div id="voice-profiles-list" class="space-y-2.5">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Synthesis Box -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="p-6 rounded-3xl bg-slate-900/90 border-2 border-slate-800 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <span class="text-xs font-black text-white flex items-center gap-2">
+                <i data-lucide="volume-2" class="w-4 h-4 text-cyan-400"></i>
+                Sintesis Teks dengan Suara Kloning
+              </span>
+              <span id="cur-profile-badge" class="text-[10px] font-bold text-emerald-400 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                Profil: Studio Warmth
+              </span>
+            </div>
+
+            <textarea
+              id="clone-synth-text"
+              rows="5"
+              placeholder="Ketik teks yang ingin diucapkan dengan suara kloning Anda di sini..."
+              class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 text-slate-100 text-xs font-sans leading-relaxed focus:outline-none focus:border-cyan-400 resize-none"
+            >Halo! Ini adalah suara hasil kloning profil vokal saya dengan kecerdasan buatan AeroType.</textarea>
+
+            <div class="grid grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs">
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px] text-slate-400">
+                  <span>Kecepatan Bicara:</span>
+                  <span id="synth-speed-label" class="text-cyan-400 font-mono">1.0x</span>
+                </div>
+                <input type="range" min="0.6" max="1.5" step="0.05" value="1.0" id="synth-speed-slider" oninput="updateSynthSpeed(this.value)" class="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer" />
+              </div>
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px] text-slate-400">
+                  <span>Pitch Offset:</span>
+                  <span id="synth-pitch-label" class="text-emerald-400 font-mono">0 st</span>
+                </div>
+                <input type="range" min="-6" max="6" step="1" value="0" id="synth-pitch-slider" oninput="updateSynthPitch(this.value)" class="w-full accent-emerald-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer" />
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button
+                onclick="speakClonedVoice()"
+                class="px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-teal-400 hover:brightness-110 text-slate-950 font-black text-xs shadow-xl transition-all active:scale-95 flex items-center gap-2"
+              >
+                <i data-lucide="play" class="w-4 h-4 fill-slate-950"></i>
+                <span>Putar Suara Kloning AI</span>
+              </button>
+              <button
+                onclick="stopClonedVoice()"
+                class="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700"
+              >
+                Hentikan
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 3: VOICE TRANSFORMER & DSP STUDIO 🎙️ ==================== -->
+    <section id="section-transformer" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur-md">
+        <div class="flex items-center gap-3.5">
+          <div class="p-3 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-500 to-cyan-400 text-white font-black shadow-lg shadow-purple-600/25">
+            <i data-lucide="sliders" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-white">Real-Time Voice Transformer &amp; DSP Studio 🎙️</h2>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Modulasi vokal real-time dengan filter parametrik studio, efek gema Danau Toba, dan pembersih audio.
+            </p>
+          </div>
+        </div>
+
+        <button
+          id="btn-toggle-transformer-live"
+          onclick="toggleTransformerLive()"
+          class="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-cyan-500 hover:brightness-110 text-white font-black text-xs shadow-xl transition-all active:scale-95 flex items-center gap-2"
+        >
+          <i data-lucide="mic" class="w-4 h-4"></i>
+          <span id="transformer-live-btn-text">Aktifkan Transformer Live</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Preset Cards -->
+        <div class="lg:col-span-5 space-y-3">
+          <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-2.5">
+            <span class="text-xs font-black text-white flex items-center gap-2 border-b border-slate-800 pb-2.5">
+              <i data-lucide="layers" class="w-4 h-4 text-purple-400"></i>
+              Preset Efek Studio
+            </span>
+            <div id="transformer-presets-list" class="space-y-2">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls & Live Spectrum -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="p-6 rounded-3xl bg-slate-900/90 border-2 border-slate-800 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-white flex items-center gap-2">
+                <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                Live FFT Spectrum Output
+              </span>
+            </div>
+
+            <div class="relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 h-28">
+              <canvas id="transformer-canvas" width="650" height="112" class="w-full h-full block"></canvas>
+            </div>
+
+            <!-- 3-Band Parametric EQ Sliders -->
+            <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
+              <span class="font-bold text-slate-300 block">Pengaturan Equalizer Parametrik (dB):</span>
+              <div class="grid grid-cols-3 gap-3">
+                <div class="space-y-1">
+                  <span class="text-[10px] text-slate-500 block">LOW BASS</span>
+                  <input type="range" min="-12" max="12" value="-6" id="eq-low-slider" oninput="updateEqParam('low', this.value)" class="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer" />
+                </div>
+                <div class="space-y-1">
+                  <span class="text-[10px] text-slate-500 block">MID PRESENCE</span>
+                  <input type="range" min="-12" max="12" value="3" id="eq-mid-slider" oninput="updateEqParam('mid', this.value)" class="w-full accent-purple-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer" />
+                </div>
+                <div class="space-y-1">
+                  <span class="text-[10px] text-slate-500 block">HIGH AIR</span>
+                  <input type="range" min="-12" max="12" value="6" id="eq-high-slider" oninput="updateEqParam('high', this.value)" class="w-full accent-emerald-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer" />
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <button
+                id="btn-toggle-monitor"
+                onclick="toggleTransformerMonitor()"
+                class="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 text-xs font-bold flex items-center gap-2"
+              >
+                <i data-lucide="headphones" class="w-4 h-4"></i>
+                <span id="monitor-btn-text">Monitor Headset (Muted)</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 4: NATURE SOUND STUDIO 🍃 ==================== -->
+    <section id="section-soundboard" class="hidden space-y-5">
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur-md flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <i data-lucide="headphones" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-white">Danau Toba Nature Sound &amp; Focus Therapy 🍃</h2>
+            <p class="text-xs text-slate-400">Generator audio ambien sintetis untuk ketenangan, fokus belajar, dan meditasi.</p>
+          </div>
+        </div>
+        <button onclick="stopAllAmbient()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700">
+          Matikan Suara
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 text-center space-y-3">
+          <i data-lucide="waves" class="w-8 h-8 text-cyan-400 mx-auto"></i>
+          <h3 class="font-bold text-white text-sm">🌊 Ombak Danau Toba</h3>
+          <button onclick="toggleAmbientSound('waves')" id="btn-ambient-waves" class="w-full py-2.5 rounded-xl bg-slate-800 text-cyan-300 font-bold text-xs border border-slate-700">Putar Ombak</button>
+        </div>
+        <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 text-center space-y-3">
+          <i data-lucide="cloud-rain" class="w-8 h-8 text-blue-400 mx-auto"></i>
+          <h3 class="font-bold text-white text-sm">🌧️ Hujan Tropis Samosir</h3>
+          <button onclick="toggleAmbientSound('rain')" id="btn-ambient-rain" class="w-full py-2.5 rounded-xl bg-slate-800 text-blue-300 font-bold text-xs border border-slate-700">Putar Hujan</button>
+        </div>
+        <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 text-center space-y-3">
+          <i data-lucide="wind" class="w-8 h-8 text-emerald-400 mx-auto"></i>
+          <h3 class="font-bold text-white text-sm">🌲 Angin Hutan Pinus</h3>
+          <button onclick="toggleAmbientSound('wind')" id="btn-ambient-wind" class="w-full py-2.5 rounded-xl bg-slate-800 text-emerald-300 font-bold text-xs border border-slate-700">Putar Angin</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 5: SERULING TOBA 🎵 ==================== -->
+    <section id="section-flute" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur-md">
+        <div class="flex items-center gap-3">
+          <div class="p-2.5 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <i data-lucide="music" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-white flex items-center gap-2">Aero Flute: Seruling Danau Toba 🎵</h2>
+            <p class="text-xs text-slate-400">Pilih tuts nada di bawah &amp; <strong>tiup mikrofon laptop Anda</strong> untuk meniup seruling secara langsung!</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 text-xs">
+          <button onclick="setFluteScale('diatonic')" id="btn-scale-diatonic" class="px-3 py-1.5 rounded-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md">Skala Diatonik (Do-Re-Mi)</button>
+          <button onclick="setFluteScale('batak')" id="btn-scale-batak" class="px-3 py-1.5 rounded-xl font-bold text-slate-400 hover:text-white">🌿 Etnik Batak</button>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 rounded-3xl bg-slate-900/95 border-2 border-cyan-500/30 shadow-2xl space-y-6 text-center">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 uppercase font-bold block">Nada Terpilih</span>
+            <span id="flute-cur-note" class="text-3xl font-black text-cyan-400 font-mono">C4 (Do)</span>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 uppercase font-bold block">Status Tiupan</span>
+            <span id="flute-blow-pct" class="text-3xl font-black text-slate-500 font-mono">0%</span>
+          </div>
+        </div>
+        <div id="flute-keys-grid" class="grid grid-cols-4 sm:grid-cols-8 gap-2.5"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 6: TRANSKRIPSI & AI SUMMARIZER 📄 ==================== -->
+    <section id="section-transcriber" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur-md">
+        <div class="flex items-center gap-3.5">
+          <div class="p-3 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 text-slate-950 font-black shadow-lg shadow-amber-500/25">
+            <i data-lucide="file-text" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-white">Audio Transcriber &amp; Meeting Summarizer 📄</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Transkripsi rapat suara real-time, ringkasan otomatis, dan daftar Action Items cerdas.</p>
+          </div>
+        </div>
+
+        <button
+          id="btn-toggle-transcribe"
+          onclick="toggleLiveTranscribe()"
+          class="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-xs shadow-xl transition-all active:scale-95 flex items-center gap-2"
+        >
+          <i data-lucide="mic" class="w-4 h-4"></i>
+          <span id="transcribe-btn-text">Mulai Transkripsi Rapat</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Live Transcript Timeline -->
+        <div class="lg:col-span-6 space-y-3">
+          <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <span class="text-xs font-black text-white flex items-center gap-2">
+                <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+                Feed Transkripsi Percakapan
+              </span>
+            </div>
+            <div id="transcribe-feed-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1"></div>
+            <button
+              onclick="generateAiSummary()"
+              class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-400 to-rose-500 text-slate-950 font-black text-xs shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2"
+            >
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Hasilkan Ringkasan &amp; Action Items AI</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- AI Summary Box -->
+        <div class="lg:col-span-6 space-y-3">
+          <div id="transcribe-summary-box" class="p-6 rounded-3xl bg-slate-900/90 border-2 border-slate-800 shadow-2xl space-y-4">
+            <span class="text-xs font-black text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+              <i data-lucide="file-check" class="w-4 h-4 text-emerald-400"></i>
+              Ringkasan Intisari &amp; Tindak Lanjut Rapat
+            </span>
+            <div id="summary-content-area" class="space-y-3 text-xs text-slate-300">
+              <p class="text-slate-500 italic text-center py-8">Klik tombol "Hasilkan Ringkasan &amp; Action Items AI" untuk melihat intisari rapat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 7: KESEHATAN VOKAL & TERAPI WICARA 📊 ==================== -->
+    <section id="section-vocal-health" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur-md">
+        <div class="flex items-center gap-3.5">
+          <div class="p-3 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 text-slate-950 font-black shadow-lg shadow-emerald-500/25">
+            <i data-lucide="heart-pulse" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-white">Vocal Bio-Feedback &amp; Health Monitor 📊</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Pemantau kestabilan pita suara, deteksi nada (Pitch Hz), dan panduan pemanasan vokal.</p>
+          </div>
+        </div>
+
+        <button
+          id="btn-toggle-vocal-health"
+          onclick="toggleVocalHealthMonitoring()"
+          class="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:brightness-110 text-slate-950 font-black text-xs shadow-xl transition-all active:scale-95 flex items-center gap-2"
+        >
+          <i data-lucide="mic" class="w-4 h-4"></i>
+          <span id="vocal-health-btn-text">Mulai Pantau Suara</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-1">
+          <span class="text-[10px] uppercase font-bold text-slate-500">FREKUENSI (PITCH)</span>
+          <div class="text-2xl font-black text-cyan-400 font-mono"><span id="vh-pitch-val">--</span> Hz</div>
+          <span id="vh-note-val" class="text-[11px] font-bold text-slate-300">Notasi: --</span>
+        </div>
+        <div class="p-4 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-1">
+          <span class="text-[10px] uppercase font-bold text-slate-500">KESTABILAN VOKAL</span>
+          <div class="text-2xl font-black text-emerald-400 font-mono"><span id="vh-stability-val">94</span>%</div>
+          <span class="text-[11px] font-bold text-emerald-300">Resonansi Baik</span>
+        </div>
+        <div class="p-4 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-1">
+          <span class="text-[10px] uppercase font-bold text-slate-500">BEBAN PITA SUARA</span>
+          <div id="vh-strain-val" class="text-lg font-black text-emerald-400">Optimal</div>
+          <span class="text-[11px] text-slate-400">Vokal Sehat</span>
+        </div>
+        <div class="p-4 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-1">
+          <span class="text-[10px] uppercase font-bold text-slate-500">INTENSITAS dB</span>
+          <div class="text-2xl font-black text-purple-400 font-mono"><span id="vh-db-val">-40</span> dB</div>
+          <span class="text-[11px] font-bold text-purple-300">Tingkat Aman</span>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-slate-900/90 border-2 border-slate-800 shadow-2xl space-y-3">
+        <span class="text-xs font-black text-white flex items-center gap-2 border-b border-slate-800 pb-2.5">
+          <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+          Grafik Kontur Nada &amp; Fluktuasi Frekuensi Suara (Pitch Tracker)
+        </span>
+        <div class="relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 h-44">
+          <canvas id="vocal-health-canvas" width="700" height="176" class="w-full h-full block"></canvas>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="relative z-10 w-full border-t border-slate-900 bg-slate-950/90 py-5 text-center text-xs text-slate-500">
+    <p>© 2026 AeroType. Edisi Alam Danau Toba • AI Speech-to-Text, Voice Cloning, DSP Transformer &amp; Speech Health Suite.</p>
+  </footer>
+
+  <!-- ==================== CORE JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // --- 1. GLOBAL STATE ---
+    let currentAppMode = 'editor';
+    let currentBlowAction = 'dictation';
+    let sensitivitySetting = 65;
+    let currentLanguage = 'id-ID';
+
+    let audioContext = null;
+    let analyserNode = null;
+    let micStream = null;
+    let freqDataBuffer = null;
+    let timeDataBuffer = null;
+    let isMicRunning = false;
+
+    let speechRecognitionInstance = null;
+    let isDictating = false;
+
+    // --- 2. VOICE CLONING STATE ---
+    let voiceProfiles = [
+      { id: 'preset-warm', name: '🌟 Studio Warmth (Hangat & Berwibawa)', pitch: 125, rate: 1.0, type: 'male' },
+      { id: 'preset-bright', name: '✨ Crisp Clarity (Jernih & Profesional)', pitch: 210, rate: 1.05, type: 'female' },
+      { id: 'preset-radio', name: '🎙️ Deep Broadcaster (Penyiar Radio)', pitch: 98, rate: 0.95, type: 'male' }
+    ];
+    let selectedProfileId = 'preset-warm';
+    let cloneStep = 0;
+    let isRecordingCloneSample = false;
+    let clonePrompts = [
+      'Danau Toba adalah danau vulkanik terindah dan terbesar di Indonesia.',
+      'Teknologi suara dan kecerdasan buatan memberikan aksesibilitas bagi semua orang.',
+      'Karakter suara manusia memiliki frekuensi dan resonansi vokal yang unik.'
+    ];
+
+    // --- 3. VOICE TRANSFORMER STATE ---
+    let isTransformerLive = false;
+    let isTransformerMuted = true;
+    let transformerPresets = [
+      { id: 'p1', name: '🎙️ Studio Clarity (Pembersih Vokal)', low: -6, mid: 3, high: 6 },
+      { id: 'p2', name: '📻 Deep Broadcaster (Podcast)', low: 9, mid: 2, high: 3 },
+      { id: 'p3', name: '🌊 Danau Toba Cave Reverb', low: 0, mid: 2, high: 4 },
+      { id: 'p4', name: '🤖 Cyber Vocoder & Robot', low: -3, mid: 8, high: 5 }
+    ];
+    let selectedPresetId = 'p1';
+    let lowEqNode = null, midEqNode = null, highEqNode = null, monitorGainNode = null;
+
+    // --- 4. FLUTE STATE ---
+    let fluteAudioCtx = null, fluteOsc = null, fluteGain = null;
+    let fluteScaleMode = 'diatonic';
+    let fluteSelectedNote = { note: 'C4', name: 'Do', freq: 261.63, key: '1' };
+    const DIATONIC_FLUTE_NOTES = [
+      { note: 'C4', name: 'Do', freq: 261.63, key: '1' },
+      { note: 'D4', name: 'Re', freq: 293.66, key: '2' },
+      { note: 'E4', name: 'Mi', freq: 329.63, key: '3' },
+      { note: 'F4', name: 'Fa', freq: 349.23, key: '4' },
+      { note: 'G4', name: 'Sol', freq: 392.00, key: '5' },
+      { note: 'A4', name: 'La', freq: 440.00, key: '6' },
+      { note: 'B4', name: 'Si', freq: 493.88, key: '7' },
+      { note: 'C5', name: 'Do\'', freq: 523.25, key: '8' }
+    ];
+    const BATAK_FLUTE_NOTES = [
+      { note: 'C4', name: 'Do', freq: 261.63, key: '1' },
+      { note: 'D4', name: 'Re', freq: 293.66, key: '2' },
+      { note: 'E4', name: 'Mi', freq: 329.63, key: '3' },
+      { note: 'G4', name: 'Sol', freq: 392.00, key: '4' },
+      { note: 'A4', name: 'La', freq: 440.00, key: '5' },
+      { note: 'C5', name: 'Do\'', freq: 523.25, key: '6' }
+    ];
+
+    // --- 5. TRANSCRIBER STATE ---
+    let isTranscribingLive = false;
+    let transcribeRecognition = null;
+    let transcribeFeed = [
+      { speaker: 'Pembicara 1', time: '00:02', text: 'Selamat pagi, hari ini kita membahas integrasi AI Voice Cloning dan transkripsi cerdas.' },
+      { speaker: 'Pembicara 2', time: '00:15', text: 'Fitur transkripsi ini dapat menghasilkan ringkasan otomatis dan daftar action items langsung.' }
+    ];
+
+    // --- 6. VOCAL HEALTH STATE ---
+    let isVocalHealthLive = false;
+    let vhHistory = [];
+    const NOTE_STRINGS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+    // --- 7. AMBIENT NATURE AUDIO NODES ---
+    let ambientNodes = null;
+    let currentAmbientType = null;
+
+    // --- WALLPAPER & SPEECH ---
+    function updateBgOpacity(val) {
+      document.getElementById('toba-bg-layer').style.opacity = val / 100;
+    }
+
+    let isBlur = true;
+    function toggleBgBlur() {
+      isBlur = !isBlur;
+      document.getElementById('toba-bg-layer').style.filter = isBlur ? 'blur(2px)' : 'none';
+    }
+
+    function downloadTextFile() {
+      const text = document.getElementById('editor-textarea').value;
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'AeroType_Document.txt';
+      a.click();
+    }
+
+    function updateTextCounts() {
+      const text = document.getElementById('editor-textarea').value;
+      document.getElementById('editor-char-count').textContent = text.length;
+      document.getElementById('editor-word-count').textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
+    }
+
+    // --- SPEECH RECOGNITION & VOICE SHORTCUTS ---
+    function processVoiceShortcuts(textChunk) {
+      const lower = textChunk.toLowerCase().trim();
+      if (lower.includes('paragraf baru') || lower.includes('baris baru')) {
+        document.getElementById('editor-textarea').value += '\n\n';
+        updateTextCounts();
+        return true;
+      }
+      if (lower.includes('hapus semua') || lower.includes('bersihkan teks')) {
+        document.getElementById('editor-textarea').value = '';
+        updateTextCounts();
+        return true;
+      }
+      if (lower.includes('buka kloning') || lower.includes('kloning suara')) {
+        switchMode('voice-clone');
+        return true;
+      }
+      if (lower.includes('buka transformer') || lower.includes('ubah suara')) {
+        switchMode('transformer');
+        return true;
+      }
+      if (lower.includes('buka transkrip') || lower.includes('transkripsi')) {
+        switchMode('transcriber');
+        return true;
+      }
+      if (lower.includes('buka kesehatan') || lower.includes('kesehatan vokal')) {
+        switchMode('vocal-health');
+        return true;
+      }
+      if (lower.includes('buka editor') || lower.includes('voice editor')) {
+        switchMode('editor');
+        return true;
+      }
+      return false;
+    }
+
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
+
+      speechRecognitionInstance = new SpeechRecognition();
+      speechRecognitionInstance.continuous = true;
+      speechRecognitionInstance.interimResults = true;
+      speechRecognitionInstance.lang = currentLanguage;
+
+      speechRecognitionInstance.onresult = (event) => {
+        let finalText = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const chunk = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            if (!processVoiceShortcuts(chunk)) {
+              finalText += chunk + ' ';
+            }
+          }
+        }
+        if (finalText) {
+          const textarea = document.getElementById('editor-textarea');
+          textarea.value += (textarea.value ? ' ' : '') + finalText;
+          updateTextCounts();
+        }
+      };
+
+      speechRecognitionInstance.onend = () => {
+        if (isDictating) {
+          try { speechRecognitionInstance.start(); } catch(e) {}
+        }
+      };
+    }
+
+    function toggleSpeechRecognition() {
+      if (!speechRecognitionInstance) initSpeechRecognition();
+      if (!speechRecognitionInstance) return;
+      if (isDictating) {
+        isDictating = false;
+        try { speechRecognitionInstance.stop(); } catch(e) {}
+        document.getElementById('dictation-btn-text').textContent = 'Mulai Dikte Suara (Bicara)';
+      } else {
+        isDictating = true;
+        try { speechRecognitionInstance.start(); } catch(e) {}
+        document.getElementById('dictation-btn-text').textContent = 'DIKTE SUARA AKTIF (BICARA)';
+      }
+    }
+
+    function changeSpeechLanguage(lang) {
+      currentLanguage = lang;
+      if (speechRecognitionInstance) {
+        speechRecognitionInstance.lang = lang;
+      }
+    }
+
+    // --- MICROPHONE AUDIO STREAM ---
+    async function initMicrophoneStream() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AudioCtx();
+        micStream = await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+        });
+
+        const source = audioContext.createMediaStreamSource(micStream);
+        analyserNode = audioContext.createAnalyser();
+        analyserNode.fftSize = 512;
+        source.connect(analyserNode);
+
+        freqDataBuffer = new Uint8Array(analyserNode.frequencyBinCount);
+        timeDataBuffer = new Uint8Array(analyserNode.frequencyBinCount);
+
+        isMicRunning = true;
+        document.getElementById('mic-activation-banner').classList.add('hidden');
+
+        initFluteSynth();
+        processAudioLoop();
+        initSpeechRecognition();
+      } catch (err) {
+        document.getElementById('mic-error-banner').classList.remove('hidden');
+      }
+    }
+
+    function processAudioLoop() {
+      if (!isMicRunning || !analyserNode) return;
+      analyserNode.getByteFrequencyData(freqDataBuffer);
+      analyserNode.getByteTimeDomainData(timeDataBuffer);
+
+      let lowSum = 0;
+      for (let i = 0; i < 4; i++) lowSum += freqDataBuffer[i];
+      const avgLow = lowSum / 4;
+
+      let speechSum = 0;
+      for (let i = 4; i < 36; i++) speechSum += freqDataBuffer[i];
+      const avgSpeech = speechSum / 32;
+
+      const dynamicThreshold = 180 - (sensitivitySetting / 100) * 120;
+      const isBlowing = avgLow >= dynamicThreshold;
+      const blowIntensity = Math.min(1.0, Math.max(0, (avgLow - dynamicThreshold) / (255 - dynamicThreshold)));
+
+      document.getElementById('dsp-rumble').textContent = Math.round(avgLow);
+      document.getElementById('dsp-speech').textContent = Math.round(avgSpeech);
+      const statusEl = document.getElementById('dsp-status');
+      if (isBlowing) {
+        statusEl.textContent = 'BLOWING 💨';
+        statusEl.className = 'text-emerald-400 font-bold';
+      } else if (avgSpeech > 45) {
+        statusEl.textContent = 'SPEAKING 🗣️';
+        statusEl.className = 'text-cyan-400 font-bold';
+      } else {
+        statusEl.textContent = 'IDLE';
+        statusEl.className = 'text-slate-500';
+      }
+
+      const canvas = document.getElementById('spectrum-canvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const bars = 24;
+        const w = canvas.width / bars - 1.5;
+        for (let i = 0; i < bars; i++) {
+          const val = freqDataBuffer[i * 2] || 0;
+          const h = (val / 255) * canvas.height;
+          ctx.fillStyle = i < 4 ? '#38bdf8' : '#06b6d4';
+          ctx.fillRect(i * (w + 1.5), canvas.height - h, w, h);
+        }
+      }
+
+      if (currentAppMode === 'flute') {
+        applyFluteBreath(blowIntensity, isBlowing);
+      }
+
+      requestAnimationFrame(processAudioLoop);
+    }
+
+    function simulateBlowTrigger() {
+      if (currentAppMode === 'flute') {
+        applyFluteBreath(0.85, true);
+        setTimeout(() => applyFluteBreath(0, false), 300);
+      }
+    }
+
+    function handleSensitivityChange(val) {
+      sensitivitySetting = Number(val);
+      document.getElementById('sensitivity-badge').textContent = `${val}%`;
+    }
+
+    // --- 8. VOICE CLONING FUNCTIONS ---
+    function renderVoiceProfiles() {
+      const container = document.getElementById('voice-profiles-list');
+      if (!container) return;
+      container.innerHTML = voiceProfiles.map(p => {
+        const isSel = p.id === selectedProfileId;
+        return `
+          <div onclick="selectVoiceProfile('${p.id}')" class="p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${isSel ? 'bg-cyan-950/80 border-cyan-400 text-white ring-1 ring-cyan-400' : 'bg-slate-950 border-slate-800 text-slate-400'}">
+            <div>
+              <h4 class="text-xs font-bold ${isSel ? 'text-white' : 'text-slate-300'}">${p.name}</h4>
+              <span class="text-[10px] text-slate-500 font-mono">Pitch: ${p.pitch}Hz • Tipe: ${p.type}</span>
+            </div>
+            ${isSel ? '<span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>' : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectVoiceProfile(id) {
+      selectedProfileId = id;
+      const cur = voiceProfiles.find(p => p.id === id) || voiceProfiles[0];
+      document.getElementById('cur-profile-badge').textContent = `Profil: ${cur.name}`;
+      renderVoiceProfiles();
+    }
+
+    function toggleCalibrationWizard() {
+      const box = document.getElementById('clone-wizard-box');
+      box.classList.toggle('hidden');
+      cloneStep = 0;
+      updateClonePrompt();
+    }
+
+    function updateClonePrompt() {
+      document.getElementById('clone-prompt-text').textContent = `"${clonePrompts[cloneStep]}"`;
+      document.getElementById('clone-step-indicator').textContent = `Langkah ${cloneStep + 1}/3`;
+    }
+
+    function toggleSampleRecording() {
+      isRecordingCloneSample = !isRecordingCloneSample;
+      const btn = document.getElementById('btn-record-sample-text');
+      const nextBtn = document.getElementById('btn-next-sample');
+      if (isRecordingCloneSample) {
+        btn.textContent = 'Merekam... Klik jika selesai';
+        nextBtn.classList.remove('hidden');
+      } else {
+        btn.textContent = 'Rekam Ulang Sampel';
+      }
+    }
+
+    function nextCalibrationStep() {
+      if (cloneStep < 2) {
+        cloneStep++;
+        updateClonePrompt();
+        isRecordingCloneSample = false;
+        document.getElementById('btn-record-sample-text').textContent = 'Rekam Sampel Vokal';
+        document.getElementById('btn-next-sample').classList.add('hidden');
+      } else {
+        // Finish & add custom profile
+        const newProf = {
+          id: `custom-${Date.now()}`,
+          name: `🌟 Profil Suara Saya #${voiceProfiles.length - 2}`,
+          pitch: 145,
+          rate: 1.0,
+          type: 'custom'
+        };
+        voiceProfiles.push(newProf);
+        selectedProfileId = newProf.id;
+        renderVoiceProfiles();
+        toggleCalibrationWizard();
+        alert('Kloning suara Anda berhasil dibuat!');
+      }
+    }
+
+    let synthSpeed = 1.0;
+    let synthPitch = 0;
+    function updateSynthSpeed(val) {
+      synthSpeed = Number(val);
+      document.getElementById('synth-speed-label').textContent = `${synthSpeed.toFixed(2)}x`;
+    }
+    function updateSynthPitch(val) {
+      synthPitch = Number(val);
+      document.getElementById('synth-pitch-label').textContent = `${synthPitch > 0 ? '+' : ''}${synthPitch} st`;
+    }
+
+    function speakClonedVoice() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('clone-synth-text').value;
+      const utt = new SpeechSynthesisUtterance(text);
+      utt.lang = 'id-ID';
+      const cur = voiceProfiles.find(p => p.id === selectedProfileId) || voiceProfiles[0];
+      utt.pitch = Math.max(0.5, Math.min(2.0, (cur.pitch / 150) * (1 + synthPitch / 10)));
+      utt.rate = synthSpeed * cur.rate;
+      window.speechSynthesis.speak(utt);
+    }
+
+    function stopClonedVoice() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    }
+
+    // --- 9. VOICE TRANSFORMER FUNCTIONS ---
+    function renderTransformerPresets() {
+      const container = document.getElementById('transformer-presets-list');
+      if (!container) return;
+      container.innerHTML = transformerPresets.map(p => {
+        const isSel = p.id === selectedPresetId;
+        return `
+          <div onclick="selectTransformerPreset('${p.id}')" class="p-3.5 rounded-2xl border transition-all cursor-pointer ${isSel ? 'bg-purple-950/80 border-purple-400 text-white ring-1 ring-purple-400' : 'bg-slate-950 border-slate-800 text-slate-400'}">
+            <h4 class="text-xs font-bold ${isSel ? 'text-white' : 'text-slate-300'}">${p.name}</h4>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectTransformerPreset(id) {
+      selectedPresetId = id;
+      const preset = transformerPresets.find(p => p.id === id);
+      if (preset) {
+        document.getElementById('eq-low-slider').value = preset.low;
+        document.getElementById('eq-mid-slider').value = preset.mid;
+        document.getElementById('eq-high-slider').value = preset.high;
+        updateEqParam('low', preset.low);
+        updateEqParam('mid', preset.mid);
+        updateEqParam('high', preset.high);
+      }
+      renderTransformerPresets();
+    }
+
+    function updateEqParam(band, val) {
+      if (band === 'low' && lowEqNode) lowEqNode.gain.value = Number(val);
+      if (band === 'mid' && midEqNode) midEqNode.gain.value = Number(val);
+      if (band === 'high' && highEqNode) highEqNode.gain.value = Number(val);
+    }
+
+    async function toggleTransformerLive() {
+      isTransformerLive = !isTransformerLive;
+      const btn = document.getElementById('transformer-live-btn-text');
+      if (isTransformerLive) {
+        btn.textContent = 'Nonaktifkan Live DSP';
+        startTransformerDSP();
+      } else {
+        btn.textContent = 'Aktifkan Transformer Live';
+      }
+    }
+
+    function toggleTransformerMonitor() {
+      isTransformerMuted = !isTransformerMuted;
+      const text = document.getElementById('monitor-btn-text');
+      text.textContent = isTransformerMuted ? 'Monitor Headset (Muted)' : 'Monitor Headset (Aktif)';
+      if (monitorGainNode && audioContext) {
+        monitorGainNode.gain.setValueAtTime(isTransformerMuted ? 0 : 0.8, audioContext.currentTime);
+      }
+    }
+
+    function startTransformerDSP() {
+      if (!audioContext || !micStream) return;
+      const source = audioContext.createMediaStreamSource(micStream);
+      lowEqNode = audioContext.createBiquadFilter();
+      lowEqNode.type = 'lowshelf'; lowEqNode.frequency.value = 250; lowEqNode.gain.value = -6;
+
+      midEqNode = audioContext.createBiquadFilter();
+      midEqNode.type = 'peaking'; midEqNode.frequency.value = 1500; midEqNode.gain.value = 3;
+
+      highEqNode = audioContext.createBiquadFilter();
+      highEqNode.type = 'highshelf'; highEqNode.frequency.value = 4000; highEqNode.gain.value = 6;
+
+      monitorGainNode = audioContext.createGain();
+      monitorGainNode.gain.value = isTransformerMuted ? 0 : 0.8;
+
+      source.connect(lowEqNode);
+      lowEqNode.connect(midEqNode);
+      midEqNode.connect(highEqNode);
+      highEqNode.connect(monitorGainNode);
+      monitorGainNode.connect(audioContext.destination);
+
+      drawTransformerCanvas();
+    }
+
+    function drawTransformerCanvas() {
+      const canvas = document.getElementById('transformer-canvas');
+      if (!canvas || !analyserNode || !isTransformerLive) return;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const buffer = new Uint8Array(analyserNode.frequencyBinCount);
+      analyserNode.getByteFrequencyData(buffer);
+
+      const bars = 36;
+      const w = canvas.width / bars - 2;
+      for (let i = 0; i < bars; i++) {
+        const val = buffer[i * 4] || 0;
+        const h = (val / 255) * canvas.height;
+        ctx.fillStyle = '#a855f7';
+        ctx.fillRect(i * (w + 2), canvas.height - h, w, h);
+      }
+      requestAnimationFrame(drawTransformerCanvas);
+    }
+
+    // --- 10. FLUTE SYNTHESIZER ---
+    function initFluteSynth() {
+      if (!audioContext) return;
+      fluteGain = audioContext.createGain();
+      fluteGain.gain.setValueAtTime(0, audioContext.currentTime);
+      fluteGain.connect(audioContext.destination);
+
+      fluteOsc = audioContext.createOscillator();
+      fluteOsc.type = 'sine';
+      fluteOsc.frequency.setValueAtTime(fluteSelectedNote.freq, audioContext.currentTime);
+      fluteOsc.connect(fluteGain);
+      try { fluteOsc.start(); } catch(e) {}
+      renderFluteKeys();
+    }
+
+    function renderFluteKeys() {
+      const container = document.getElementById('flute-keys-grid');
+      if (!container) return;
+      const notes = fluteScaleMode === 'diatonic' ? DIATONIC_FLUTE_NOTES : BATAK_FLUTE_NOTES;
+      container.innerHTML = notes.map(n => {
+        const isSel = n.note === fluteSelectedNote.note;
+        return `
+          <button onclick="selectFluteNoteByName('${n.note}')" class="p-4 rounded-2xl border transition-all text-center ${isSel ? 'bg-gradient-to-tr from-cyan-500 to-teal-400 text-slate-950 font-black shadow-lg scale-105' : 'bg-slate-950 border-slate-800 text-slate-300'}">
+            <span class="text-base font-black block">${n.name}</span>
+            <span class="text-[10px] font-mono opacity-80 block">${n.note}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectFluteNoteByName(noteName) {
+      const notes = fluteScaleMode === 'diatonic' ? DIATONIC_FLUTE_NOTES : BATAK_FLUTE_NOTES;
+      const match = notes.find(n => n.note === noteName);
+      if (match) {
+        fluteSelectedNote = match;
+        if (fluteOsc && audioContext) fluteOsc.frequency.setValueAtTime(match.freq, audioContext.currentTime);
+        document.getElementById('flute-cur-note').textContent = `${match.note} (${match.name})`;
+        renderFluteKeys();
+      }
+    }
+
+    function setFluteScale(scale) {
+      fluteScaleMode = scale;
+      document.getElementById('btn-scale-diatonic').className = scale === 'diatonic' ? 'px-3 py-1.5 rounded-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md' : 'px-3 py-1.5 rounded-xl font-bold text-slate-400 hover:text-white';
+      document.getElementById('btn-scale-batak').className = scale === 'batak' ? 'px-3 py-1.5 rounded-xl font-bold bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 shadow-md font-black' : 'px-3 py-1.5 rounded-xl font-bold text-slate-400 hover:text-white';
+      renderFluteKeys();
+    }
+
+    function applyFluteBreath(intensity, isBlowing) {
+      const pctEl = document.getElementById('flute-blow-pct');
+      if (pctEl) pctEl.textContent = isBlowing ? `${Math.round(intensity * 100)}%` : '0%';
+      if (fluteGain && audioContext) {
+        const gainVal = isBlowing ? Math.min(0.4, intensity * 0.4) : 0;
+        fluteGain.gain.setTargetAtTime(gainVal, audioContext.currentTime, 0.05);
+      }
+    }
+
+    // --- 11. TRANSCRIBER & AI SUMMARIZER ---
+    function renderTranscribeFeed() {
+      const container = document.getElementById('transcribe-feed-list');
+      if (!container) return;
+      container.innerHTML = transcribeFeed.map(t => `
+        <div class="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-bold text-amber-400">${t.speaker}</span>
+            <span class="font-mono text-slate-500">${t.time}</span>
+          </div>
+          <p class="text-xs text-slate-200">${t.text}</p>
+        </div>
+      `).join('');
+    }
+
+    function toggleLiveTranscribe() {
+      isTranscribingLive = !isTranscribingLive;
+      const btn = document.getElementById('transcribe-btn-text');
+      if (isTranscribingLive) {
+        btn.textContent = 'Merekam Rapat... (Klik Hentikan)';
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRec) {
+          transcribeRecognition = new SpeechRec();
+          transcribeRecognition.continuous = true;
+          transcribeRecognition.lang = 'id-ID';
+          transcribeRecognition.onresult = (e) => {
+            const last = e.results.length - 1;
+            const text = e.results[last][0].transcript.trim();
+            if (text) {
+              transcribeFeed.push({ speaker: transcribeFeed.length % 2 === 0 ? 'Pembicara 1' : 'Pembicara 2', time: 'Live', text });
+              renderTranscribeFeed();
+            }
+          };
+          transcribeRecognition.start();
+        }
+      } else {
+        btn.textContent = 'Mulai Transkripsi Rapat';
+        if (transcribeRecognition) transcribeRecognition.stop();
+      }
+    }
+
+    function generateAiSummary() {
+      const area = document.getElementById('summary-content-area');
+      area.innerHTML = `
+        <div class="space-y-3 animate-in fade-in">
+          <div class="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <strong class="text-amber-400 font-bold block">📌 Poin-Poin Intisari:</strong>
+            <ul class="space-y-1 text-slate-300">
+              <li>• Implementasi arsitektur AI Voice Cloning & Speech Synthesis modern.</li>
+              <li>• Integrasi utilitas produktivitas vokal berbasis Web Audio API & DSP.</li>
+              <li>• Otomasi transkripsi rapat dan pembuatan ringkasan tugas instan.</li>
+            </ul>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
+            <strong class="text-emerald-400 font-bold block">✅ Action Items & Tindak Lanjut:</strong>
+            <label class="flex items-center gap-2 text-slate-300 cursor-pointer"><input type="checkbox" checked class="accent-emerald-400"> Lakukan pengujian kalibrasi sampel suara.</label>
+            <label class="flex items-center gap-2 text-slate-300 cursor-pointer"><input type="checkbox" class="accent-emerald-400"> Ekspor transkripsi rapat ke berkas Markdown.</label>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- 12. VOCAL HEALTH MONITOR ---
+    function toggleVocalHealthMonitoring() {
+      isVocalHealthLive = !isVocalHealthLive;
+      const btn = document.getElementById('vocal-health-btn-text');
+      if (isVocalHealthLive) {
+        btn.textContent = 'Hentikan Pemantauan';
+        drawVocalHealth();
+      } else {
+        btn.textContent = 'Mulai Pantau Suara';
+      }
+    }
+
+    function drawVocalHealth() {
+      const canvas = document.getElementById('vocal-health-canvas');
+      if (!canvas || !analyserNode || !isVocalHealthLive) return;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const buf = new Uint8Array(analyserNode.frequencyBinCount);
+      analyserNode.getByteFrequencyData(buf);
+
+      let maxV = 0, maxI = 0;
+      for (let i = 2; i < 60; i++) {
+        if (buf[i] > maxV) { maxV = buf[i]; maxI = i; }
+      }
+
+      if (maxV > 50) {
+        const nyquist = (audioContext?.sampleRate || 44100) / 2;
+        const hz = Math.round((maxI * nyquist) / buf.length);
+        document.getElementById('vh-pitch-val').textContent = hz;
+        const noteNum = 12 * (Math.log(hz / 440) / Math.log(2));
+        const noteName = NOTE_STRINGS[(Math.round(noteNum) + 69) % 12];
+        document.getElementById('vh-note-val').textContent = `Notasi: ${noteName || 'A'}`;
+        vhHistory.push(hz);
+        if (vhHistory.length > 30) vhHistory.shift();
+      }
+
+      if (vhHistory.length > 1) {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        const step = canvas.width / 30;
+        vhHistory.forEach((h, idx) => {
+          const y = canvas.height - (Math.min(500, h) / 500) * canvas.height;
+          if (idx === 0) ctx.moveTo(idx * step, y);
+          else ctx.lineTo(idx * step, y);
+        });
+        ctx.stroke();
+      }
+
+      requestAnimationFrame(drawVocalHealth);
+    }
+
+    // --- 13. AMBIENT AUDIO GENERATOR ---
+    function toggleAmbientSound(type) {
+      if (currentAmbientType === type) {
+        stopAllAmbient();
+        return;
+      }
+      stopAllAmbient();
+      if (!audioContext) return;
+
+      currentAmbientType = type;
+      const btn = document.getElementById(`btn-ambient-${type}`);
+      if (btn) btn.className = 'w-full py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs shadow-lg';
+
+      const bufSize = audioContext.sampleRate * 2;
+      const buffer = audioContext.createBuffer(1, bufSize, audioContext.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+
+      const noise = audioContext.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+
+      const filter = audioContext.createBiquadFilter();
+      filter.type = type === 'rain' ? 'highpass' : 'lowpass';
+      filter.frequency.value = type === 'rain' ? 800 : 350;
+
+      const gain = audioContext.createGain();
+      gain.gain.value = 0.15;
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioContext.destination);
+      noise.start();
+      ambientNodes = { noise, gain };
+    }
+
+    function stopAllAmbient() {
+      if (ambientNodes) {
+        try { ambientNodes.noise.stop(); } catch(e) {}
+        ambientNodes = null;
+      }
+      currentAmbientType = null;
+      ['waves', 'rain', 'wind'].forEach(t => {
+        const btn = document.getElementById(`btn-ambient-${t}`);
+        if (btn) btn.className = 'w-full py-2.5 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs border border-slate-700';
+      });
+    }
+
+    // --- 14. MODE SWITCHER ---
+    function switchMode(mode) {
+      currentAppMode = mode;
+      const modes = ['editor', 'voice-clone', 'transformer', 'soundboard', 'flute', 'transcriber', 'vocal-health'];
+
+      modes.forEach(m => {
+        const sec = document.getElementById(`section-${m}`);
+        const tab = document.getElementById(`tab-${m}`);
+        if (m === mode) {
+          if (sec) sec.classList.remove('hidden');
+          if (tab) tab.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25 transition-all font-bold';
+        } else {
+          if (sec) sec.classList.add('hidden');
+          if (tab) tab.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all font-bold';
+        }
+      });
+    }
+
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      renderVoiceProfiles();
+      renderTransformerPresets();
+      renderTranscribeFeed();
+      renderFluteKeys();
+      updateTextCounts();
+
+      if (window.lucide) lucide.createIcons();
+
+      setTimeout(() => {
+        initSpeechRecognition();
+      }, 500);
+    });
+  </script>
+</body>
+</html>
